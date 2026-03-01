@@ -94,10 +94,6 @@ private fun GarbageListScreen(
 
                 Column(modifier = Modifier.padding(vertical = 16.dp)) {
 
-                    Text(
-                        text = "Garbage Sorting",
-                        style = MaterialTheme.typography.titleLarge
-                    )
                     uiState.garbageList.forEach { item ->
                         Row(
                             modifier = Modifier
