@@ -88,7 +88,12 @@ private fun GarbageListScreen(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                Button(onClick = uiEvents::onAddItemClick) {
+                    Text(text = "Add item")
+                }
+
                 Column(modifier = Modifier.padding(vertical = 16.dp)) {
+
                     Text(
                         text = "Garbage Sorting",
                         style = MaterialTheme.typography.titleLarge
@@ -110,10 +115,6 @@ private fun GarbageListScreen(
                             }
                         }
                     }
-                }
-
-                Button(onClick = uiEvents::onAddItemClick) {
-                    Text(text = "Add item")
                 }
             }
         }
