@@ -44,6 +44,9 @@ object GarbageSearch
 @Serializable
 object GarbageList
 
+@Serializable
+object ListGroup
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GarbageListScreen(

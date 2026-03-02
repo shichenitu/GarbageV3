@@ -28,6 +28,7 @@ import dk.chen.garbagev1.ui.features.GarbageListViewModel
 import dk.chen.garbagev1.ui.features.GarbageSearch
 import dk.chen.garbagev1.ui.features.GarbageSortingScreen
 import dk.chen.garbagev1.ui.features.GarbageSortingViewModel
+import dk.chen.garbagev1.ui.features.ListGroup
 
 @Composable
 fun MainNavigation(modifier: Modifier = Modifier) {
@@ -53,73 +54,82 @@ fun MainNavigation(modifier: Modifier = Modifier) {
                 )
             }
 
-            composable<GarbageList> {
-                GarbageListScreen(
-                    onNavigate = { event ->
-                        when (event) {
-                            is GarbageListViewModel.NavigationEvent.NavigateToAddWhat -> navController.navigate(
-                                route = AddWhat,
-                                navOptions = singleTopNavOptions
-                            )
+            navigation<ListGroup>(startDestination = GarbageList) {
+                composable<GarbageList> {
+                    GarbageListScreen(
+                        onNavigate = { event ->
+                            when (event) {
+                                is GarbageListViewModel.NavigationEvent.NavigateToAddWhat -> navController.navigate(
+                                    route = AddWhat,
+                                    navOptions = singleTopNavOptions
+                                )
 
-                            is GarbageListViewModel.NavigationEvent.NavigateToDetails -> navController.navigate (
-                                // TODO add navigation to DetailsScreen logic
-                                route = Details(itemId = event.itemId),
-                                navOptions = singleTopNavOptions
-                            )
+                                is GarbageListViewModel.NavigationEvent.NavigateToDetails -> {
+                                    println("DEBUG_ID: The item ID is ${event.itemId}")
 
-                            is GarbageListViewModel.NavigationEvent.NavigateUp -> navController.navigate (
-                                route = GarbageSearch,
-                                navOptions = singleTopNavOptions
-                            )
-                        }
-                    }
-                )
-            }
-            composable<Details>(
-                deepLinks = listOf(
-                    // TODO add deep linking matching the following URI pattern: "shopping://items/{itemId}" - check the intent-filter in the AndroidManifest.xml file
-                    navDeepLink {
-                        uriPattern = "garbage://items/{itemId}"
-                    }
-                ),
-                enterTransition = {
-                    slideIntoContainer(
-                        towards = AnimatedContentTransitionScope.SlideDirection.Left,
-                        animationSpec = tween(durationMillis = 500)
-                    )
-                },
-                exitTransition = {
-                    slideOutOfContainer(
-                        towards = AnimatedContentTransitionScope.SlideDirection.Right,
-                        animationSpec = tween(durationMillis = 500)
-                    )
-                },
-                popEnterTransition = {
-                    slideIntoContainer(
-                        towards = AnimatedContentTransitionScope.SlideDirection.Left,
-                        animationSpec = tween(durationMillis = 500)
-                    )
-                },
-                popExitTransition = {
-                    slideOutOfContainer(
-                        towards = AnimatedContentTransitionScope.SlideDirection.Right,
-                        animationSpec = tween(durationMillis = 500)
-                    )
-                }
-            ) {
-                DetailsScreen(
-                    onNavigate = { event: DetailsViewModel.NavigationEvent ->
-                        when (event) {
-                            is DetailsViewModel.NavigationEvent.NavigateUp -> {
-                                // TODO add back button logic
-                                navController.navigateUp()
+                                    navController.navigate (
+                                        // TODO add navigation to DetailsScreen logic
+                                        route = Details(itemId = event.itemId),
+                                        navOptions = singleTopNavOptions
+                                    )
+                                }
+
+                                is GarbageListViewModel.NavigationEvent.NavigateUp -> navController.navigate (
+                                    route = GarbageSearch,
+                                    navOptions = singleTopNavOptions
+                                )
                             }
                         }
+                    )
+                }
+
+                composable<Details>(
+                    deepLinks = listOf(
+                        // TODO add deep linking matching the following URI pattern: "shopping://items/{itemId}" - check the intent-filter in the AndroidManifest.xml file
+                        navDeepLink {
+                            uriPattern = "garbage://items/{itemId}"
+                        }
+                    ),
+                    enterTransition = {
+                        slideIntoContainer(
+                            towards = AnimatedContentTransitionScope.SlideDirection.Left,
+                            animationSpec = tween(durationMillis = 500)
+                        )
+                    },
+                    exitTransition = {
+                        slideOutOfContainer(
+                            towards = AnimatedContentTransitionScope.SlideDirection.Right,
+                            animationSpec = tween(durationMillis = 500)
+                        )
+                    },
+                    popEnterTransition = {
+                        slideIntoContainer(
+                            towards = AnimatedContentTransitionScope.SlideDirection.Left,
+                            animationSpec = tween(durationMillis = 500)
+                        )
+                    },
+                    popExitTransition = {
+                        slideOutOfContainer(
+                            towards = AnimatedContentTransitionScope.SlideDirection.Right,
+                            animationSpec = tween(durationMillis = 500)
+                        )
                     }
-                )
+                ) {
+                    DetailsScreen(
+                        onNavigate = { event: DetailsViewModel.NavigationEvent ->
+                            when (event) {
+                                is DetailsViewModel.NavigationEvent.NavigateUp -> {
+                                    // TODO add back button logic
+                                    navController.navigateUp()
+                                }
+                            }
+                        }
+                    )
+                }
             }
         }
+
+
         composable<AddWhat>(
             enterTransition = {
                 slideIntoContainer(
