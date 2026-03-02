@@ -12,9 +12,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.typography
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -31,7 +36,6 @@ import dk.chen.garbagev1.domain.Item
 import dk.chen.garbagev1.R
 import dk.chen.garbagev1.ui.theme.theme.GarbageV1Theme
 import dk.chen.garbagev1.domain.fullDescription
-
 
 @Composable
 fun GarbageSortingScreen(
@@ -53,6 +57,7 @@ fun GarbageSortingScreen(
         uiEvents = viewModel.uiEvents)
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun GarbageSortingScreen(
     modifier: Modifier = Modifier,
@@ -61,64 +66,77 @@ private fun GarbageSortingScreen(
 ) {
     val focusManager = LocalFocusManager.current
 
-    LazyColumn(
-        modifier = modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        item {
-            TextField(
-                value = uiState.itemWhat,
-                onValueChange = { uiEvents.onWhatChange(it) },
-                label = { Text(text = stringResource(id = R.string.garbage_item_label)) },
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(text = stringResource(id = R.string.app_name)) },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer
+                )
             )
         }
+    ) { innerPadding ->
+        LazyColumn(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(innerPadding),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
 
-        item {
-            if (uiState.itemWhere.isNotEmpty()) {
-                Text(
-                    text = uiState.itemWhere,
-                    style = typography.bodyLarge,
-                    modifier = Modifier.padding(top = 8.dp)
-                )
-            }
-        }
-
-        item { Spacer(Modifier.height(16.dp)) }
-
-        if (uiState.displaySortingList) {
             item {
-                Text(
-                    text = stringResource(id = R.string.app_name),
-                    style = typography.titleLarge,
-                    modifier = Modifier.padding(vertical = 16.dp)
+                TextField(
+                    value = uiState.itemWhat,
+                    onValueChange = { uiEvents.onWhatChange(it) },
+                    label = { Text(text = stringResource(id = R.string.garbage_item_label)) },
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
                 )
             }
 
-            uiState.sortingList.forEach { item ->
-                item {
-
+            item {
+                if (uiState.itemWhere.isNotEmpty()) {
                     Text(
-                        text = item.fullDescription(),
-                        modifier = Modifier.clickable { uiEvents.onRemoveItemClick(item) }
+                        text = uiState.itemWhere,
+                        style = typography.bodyLarge,
+                        modifier = Modifier.padding(top = 8.dp)
                     )
                 }
             }
-        }
 
-        item {
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-                Button(onClick = {
-                    uiEvents.onSearchClick(itemWhat = uiState.itemWhat)
-                    focusManager.clearFocus()
-                }) {
-                    Text(text = stringResource(id = R.string.where_label))
+            item { Spacer(Modifier.height(16.dp)) }
+
+            if (uiState.displaySortingList) {
+                item {
+                    Text(
+                        text = stringResource(id = R.string.app_name),
+                        style = typography.titleLarge,
+                        modifier = Modifier.padding(vertical = 16.dp)
+                    )
                 }
-                Button(onClick = uiEvents::onToggleListVisibilityClick) {
-                    Text(text = "Show sorting list")
+
+                uiState.sortingList.forEach { item ->
+                    item {
+
+                        Text(
+                            text = item.fullDescription(),
+                            modifier = Modifier.clickable { uiEvents.onRemoveItemClick(item) }
+                        )
+                    }
+                }
+            }
+
+            item {
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+                    Button(onClick = {
+                        uiEvents.onSearchClick(itemWhat = uiState.itemWhat)
+                        focusManager.clearFocus()
+                    }) {
+                        Text(text = stringResource(id = R.string.where_label))
+                    }
+                    Button(onClick = uiEvents::onToggleListVisibilityClick) {
+                        Text(text = "Show sorting list")
+                    }
                 }
             }
         }
