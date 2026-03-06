@@ -19,6 +19,6 @@ data class BinDto(
 )
 
 fun ItemDto.toItem(): Item = Item(id = this.id, what = this.what, where = this.where)
-fun BinDto.toShop(): Bin = Bin(name = this.name, imageUrl = this.imageUrl, binColor = Color(
+fun BinDto.toBin(): Bin = Bin(name = this.name, imageUrl = this.imageUrl, binColor = Color(
     color = this.binColor.toColorInt()
 ))
