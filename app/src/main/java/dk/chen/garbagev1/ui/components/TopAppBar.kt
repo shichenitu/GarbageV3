@@ -23,7 +23,7 @@ enum class NavigationType {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ShoppingTopAppBar(
+fun GarbageTopAppBar(
     @StringRes titleRes: Int,
     navigationType: NavigationType,
     onUpClick: () -> Unit = {},

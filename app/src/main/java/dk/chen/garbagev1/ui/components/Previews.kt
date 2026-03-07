@@ -93,7 +93,7 @@ class BooleanProvider : PreviewParameterProvider<Boolean> {
     )
 }
 
-fun previewShops() = listOf(
+fun previewBins() = listOf(
     Bin(
         name = "Foodwaste",
         imageUrl = "https://cdn.prod.website-files.com/633fd4b071f8f56baf6d88c9/633fd4b071f8f5c4166d8a01_MADAFFALD_rgb_72dpi.jpg",
