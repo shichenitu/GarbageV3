@@ -35,6 +35,8 @@ import dk.chen.garbagev1.domain.fullDescription
 import dk.chen.garbagev1.ui.components.ItemOrNullProvider
 import dk.chen.garbagev1.ui.components.ThemedPreviews
 import dk.chen.garbagev1.ui.components.previewGarbageList
+import dk.chen.garbagev1.ui.navigation.AppRoute
+import dk.chen.garbagev1.ui.navigation.NestedGraph
 import dk.chen.garbagev1.ui.theme.theme.GarbageV1Theme
 import kotlinx.serialization.Serializable
 
@@ -42,7 +44,13 @@ import kotlinx.serialization.Serializable
 object GarbageGraph
 
 @Serializable
-object GarbageSearch
+object GarbageSearch : NestedGraph {
+    override val startDestination: AppRoute
+        get() = SortingList()
+}
+
+@Serializable
+data class SortingList(val itemId: String? = null) : AppRoute
 
 @Serializable
 object GarbageList
