@@ -12,23 +12,23 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navDeepLink
 import androidx.navigation.navOptions
-import dk.chen.garbagev1.ui.features.AddWhat
-import dk.chen.garbagev1.ui.features.AddWhatScreen
-import dk.chen.garbagev1.ui.features.AddWhatViewModel
-import dk.chen.garbagev1.ui.features.AddWhere
-import dk.chen.garbagev1.ui.features.AddWhereScreen
-import dk.chen.garbagev1.ui.features.AddWhereViewModel
-import dk.chen.garbagev1.ui.features.Details
-import dk.chen.garbagev1.ui.features.DetailsScreen
-import dk.chen.garbagev1.ui.features.DetailsViewModel
-import dk.chen.garbagev1.ui.features.GarbageGraph
-import dk.chen.garbagev1.ui.features.GarbageList
-import dk.chen.garbagev1.ui.features.GarbageListScreen
-import dk.chen.garbagev1.ui.features.GarbageListViewModel
-import dk.chen.garbagev1.ui.features.GarbageSearch
-import dk.chen.garbagev1.ui.features.GarbageSortingScreen
-import dk.chen.garbagev1.ui.features.GarbageSortingViewModel
-import dk.chen.garbagev1.ui.features.ListGroup
+import dk.chen.garbagev1.ui.features.garbage.AddWhat
+import dk.chen.garbagev1.ui.features.garbage.AddWhatScreen
+import dk.chen.garbagev1.ui.features.garbage.AddWhatViewModel
+import dk.chen.garbagev1.ui.features.garbage.AddWhere
+import dk.chen.garbagev1.ui.features.garbage.AddWhereScreen
+import dk.chen.garbagev1.ui.features.garbage.AddWhereViewModel
+import dk.chen.garbagev1.ui.features.garbage.Details
+import dk.chen.garbagev1.ui.features.garbage.DetailsScreen
+import dk.chen.garbagev1.ui.features.garbage.DetailsViewModel
+import dk.chen.garbagev1.ui.features.garbage.GarbageGraph
+import dk.chen.garbagev1.ui.features.garbage.GarbageList
+import dk.chen.garbagev1.ui.features.garbage.GarbageListScreen
+import dk.chen.garbagev1.ui.features.garbage.GarbageListViewModel
+import dk.chen.garbagev1.ui.features.garbage.GarbageSearch
+import dk.chen.garbagev1.ui.features.garbage.GarbageSortingScreen
+import dk.chen.garbagev1.ui.features.garbage.GarbageSortingViewModel
+import dk.chen.garbagev1.ui.features.garbage.ListGroup
 
 @Composable
 fun MainNavigation(modifier: Modifier = Modifier) {

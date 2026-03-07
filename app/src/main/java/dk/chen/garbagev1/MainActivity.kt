@@ -9,14 +9,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import dagger.hilt.android.AndroidEntryPoint
 import dk.chen.garbagev1.ui.components.SnackBarHandler
-import dk.chen.garbagev1.ui.features.GarbageSortingScreen
 import dk.chen.garbagev1.ui.navigation.MainNavigation
 import dk.chen.garbagev1.ui.theme.theme.GarbageV1Theme
 import javax.inject.Inject

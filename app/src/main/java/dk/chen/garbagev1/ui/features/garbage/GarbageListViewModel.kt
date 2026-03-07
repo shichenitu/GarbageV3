@@ -1,11 +1,10 @@
-package dk.chen.garbagev1.ui.features
+package dk.chen.garbagev1.ui.features.garbage
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dk.chen.garbagev1.domain.Item
 import dk.chen.garbagev1.domain.ItemRepository
-import dk.chen.garbagev1.ui.features.AddWhatViewModel.NavigationEvent
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

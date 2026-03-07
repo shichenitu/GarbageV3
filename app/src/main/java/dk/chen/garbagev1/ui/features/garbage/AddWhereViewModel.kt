@@ -1,4 +1,4 @@
-package dk.chen.garbagev1.ui.features
+package dk.chen.garbagev1.ui.features.garbage
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
