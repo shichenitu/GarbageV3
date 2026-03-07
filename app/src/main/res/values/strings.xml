@@ -17,4 +17,5 @@
     <string name="add_what_title">Add item: What</string>
     <string name="what_label">What</string>
     <string name="next_button_label">Next</string>
+    <string name="bins_near_you_title">Bins near you</string>
 </resources>
