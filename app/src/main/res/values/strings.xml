@@ -9,4 +9,6 @@
     <string name="item_removed_label">Item "%1$s" from "%2$s" was removed</string>
     <string name="undo_confirmation_message">The deletion was undone</string>
     <string name="textfield_error_message">Input field must be filled in</string>
+    <string name="up_button_label">Back</string>
+    <string name="close_button_label">Close</string>
 </resources>
