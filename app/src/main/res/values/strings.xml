@@ -21,4 +21,10 @@
     <string name="bins_near_you_title">Bins near you</string>
     <string name="done_button_label">Done</string>
     <string name="cancel_addition_button_label">Cancel addition</string>
+    <string name="edit_item_title">Edit item</string>
+    <string name="delete_item_title">Delete item</string>
+    <string name="delete_item_confirmation">Are you sure you want to delete this item?</string>
+    <string name="delete_button_label">Delete</string>
+    <string name="cancel_button_label">Cancel</string>
+    <string name="save_button_label">Save</string>
 </resources>

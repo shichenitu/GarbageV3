@@ -59,7 +59,14 @@ class GarbageListViewModel @Inject constructor(private val itemRepository: ItemR
     interface UiEvents {
         fun onAddItemClick()
         fun onEditItemClick(item: Item)
+        fun onWhatChange(what: String)
+        fun onWhereChange(where: String)
+        fun onSaveClick(): Boolean
         fun onUpClick()
+        fun onDeleteClick()
+        fun onConfirmDelete()
+        fun onDismissDeleteConfirmation()
+        fun onDismissDetails()
     }
 
     sealed class NavigationEvent {

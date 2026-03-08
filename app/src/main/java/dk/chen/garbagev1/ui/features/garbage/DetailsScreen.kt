@@ -9,131 +9,196 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.paneTitle
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import dk.chen.garbagev1.R
 import dk.chen.garbagev1.domain.Item
+import dk.chen.garbagev1.domain.Bin
+import dk.chen.garbagev1.ui.components.BooleanProvider
+import dk.chen.garbagev1.ui.components.BinProvider
+import dk.chen.garbagev1.ui.components.GarbageTextField
+import dk.chen.garbagev1.ui.components.ThemedPreviews
 import dk.chen.garbagev1.ui.theme.theme.GarbageV1Theme
-import kotlinx.serialization.Serializable
-
-@Serializable
-data class Details(val itemId: String)
-
-@Composable
-fun DetailsScreen(
-    onNavigate: (DetailsViewModel.NavigationEvent) -> Unit,
-    modifier: Modifier = Modifier,
-    viewModel: DetailsViewModel = hiltViewModel(),
-) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
-    LaunchedEffect(key1 = Unit) {
-        viewModel.navigationEvents.collect {
-            onNavigate(it)
-        }
-    }
-
-    uiState.selectedItem?.let { item ->
-        DetailsScreen(
-            modifier = modifier,
-            item = item,
-            uiEvents = viewModel.uiEvents
-        )
-    }
-}
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun DetailsScreen(
+fun DetailsSheet(
     item: Item,
-    uiEvents: DetailsViewModel.UiEvents,
+    isWhatError: Boolean,
+    isWhereError: Boolean,
+    showDeleteConfirmation: Boolean,
+    uiEvents: GarbageListViewModel.UiEvents,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(all = 16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(onClick = uiEvents::onUpClick) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back"
-                )
-            }
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val scope = rememberCoroutineScope()
+    val paneTitle = stringResource(id = R.string.edit_item_title)
 
-            Text(text = "Edit item")
-
-            TextButton(onClick = uiEvents::onSaveClick) {
-                Text(text = "Save")
+    if (showDeleteConfirmation) {
+        // TODO Add delete confirmation dialog. Hint: use AlertDialog
+        AlertDialog(
+            onDismissRequest = uiEvents::onDismissDeleteConfirmation,
+            title = {
+                Text(text = stringResource(id = R.string.delete_item_title))
+            },
+            text = {
+                Text(text = stringResource(id = R.string.delete_item_confirmation))
+            },
+            confirmButton = {
+                TextButton(onClick = uiEvents::onConfirmDelete) {
+                    Text(text = stringResource(id = R.string.delete_button_label))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = uiEvents::onDismissDeleteConfirmation) {
+                    Text(text = stringResource(id = R.string.cancel_button_label))
+                }
             }
+        )
+    }
+
+    ModalBottomSheet(
+        onDismissRequest = uiEvents::onDismissDetails,
+        sheetState = sheetState,
+        dragHandle = null,
+        modifier = modifier.semantics {
+            this.paneTitle = paneTitle
         }
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(all = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                IconButton(onClick = {
+                    scope.launch { sheetState.hide() }.invokeOnCompletion {
+                        if (!sheetState.isVisible) {
+                            uiEvents.onDismissDetails()
+                        }
+                    }
+                }) {
+                    Icon(
+                        imageVector = Icons.Default.Close,
+                        contentDescription = stringResource(id = R.string.close_button_label)
+                    )
+                }
 
-        Spacer(Modifier.height(height = 16.dp))
-
-        TextField(
-            value = item.what,
-            onValueChange = uiEvents::onWhatChange,
-            label = { Text(text = "What") }
-        )
-
-        Spacer(Modifier.height(height = 16.dp))
-
-        TextField(
-            value = item.where,
-            onValueChange = uiEvents::onWhereChange,
-            label = { Text(text = "Where") }
-        )
-
-        Spacer(Modifier.height(height = 16.dp))
-
-        Button(onClick = uiEvents::onDeleteClick) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    imageVector = Icons.Default.Delete,
-                    contentDescription = null
+                Text(
+                    text = stringResource(id = R.string.edit_item_title),
+                    modifier = Modifier.semantics { heading() }
                 )
 
-                Spacer(Modifier.height(height = 8.dp))
+                TextButton(onClick = {
+                    val canDismissSheet = uiEvents.onSaveClick()
+                    if (canDismissSheet)
+                        scope.launch { sheetState.hide() }.invokeOnCompletion {
+                            if (!sheetState.isVisible) {
+                                uiEvents.onDismissDetails()
+                            }
+                        }
+                }) {
+                    Text(text = stringResource(id = R.string.save_button_label))
+                }
+            }
 
-                Text(text = "Delete")
+            Spacer(Modifier.height(height = 8.dp))
+
+            val focusManager = LocalFocusManager.current
+
+            GarbageTextField(
+                value = item.what,
+                onValueChange = uiEvents::onWhatChange,
+                labelRes = R.string.what_label,
+                focusManager = focusManager,
+                isLastField = false,
+                isError = isWhatError,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 50.dp)
+            )
+
+            GarbageTextField(
+                value = item.where,
+                onValueChange = uiEvents::onWhereChange,
+                labelRes = R.string.where_label,
+                focusManager = focusManager,
+                isLastField = false,
+                isError = isWhereError,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 50.dp)
+            )
+
+            Spacer(Modifier.height(height = 8.dp))
+
+            Button(onClick = uiEvents::onDeleteClick) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.semantics(mergeDescendants = true) { }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = null
+                    )
+
+                    Spacer(Modifier.height(height = 8.dp))
+
+                    Text(text = stringResource(id = R.string.delete_button_label))
+                }
             }
         }
     }
 }
 
-@Preview(showBackground = true)
+@ThemedPreviews
 @Composable
-fun DetailsScreenPreview() {
+fun DetailsSheetPreview(@PreviewParameter(provider = BooleanProvider::class) isTrue: Boolean) {
     GarbageV1Theme {
-        DetailsScreen(
-            item = Item(what = "Milk", where = "Dairy"),
-            uiEvents = object : DetailsViewModel.UiEvents {
+        DetailsSheet(
+            item = Item(what = "Book", where = "Paper"),
+            isWhatError = isTrue,
+            isWhereError = isTrue,
+            showDeleteConfirmation = isTrue,
+            uiEvents = object : GarbageListViewModel.UiEvents {
                 override fun onWhatChange(what: String) {}
                 override fun onWhereChange(where: String) {}
-                override fun onSaveClick() {}
-                override fun onDeleteClick() {}
+                override fun onSaveClick(): Boolean {
+                    return true
+                }
                 override fun onUpClick() {}
+                override fun onDeleteClick() {}
+                override fun onConfirmDelete() {}
+                override fun onDismissDeleteConfirmation() {}
+                override fun onDismissDetails() {}
+                override fun onAddItemClick() {}
+                override fun onEditItemClick(item: Item) {}
             },
         )
     }
