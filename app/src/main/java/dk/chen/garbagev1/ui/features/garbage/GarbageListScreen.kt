@@ -20,6 +20,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,6 +31,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import coil.compose.AsyncImage
 import dk.chen.garbagev1.R
 import dk.chen.garbagev1.domain.Item
@@ -54,6 +58,24 @@ data class SortingList(val itemId: String? = null) : AppRoute
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GarbageListScreen(
+    onNavigate: (GarbageListViewModel.NavigationEvent) -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: GarbageListViewModel = hiltViewModel(),
+) {
+    val uiState by viewModel.uiState.collectAsState()
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.navigationEvents.collect {
+            onNavigate(it)
+        }
+    }
+
+    GarbageListScreen(uiState = uiState, uiEvents = viewModel.uiEvents, modifier = modifier)
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun GarbageListScreen(
     uiState: GarbageListViewModel.UiState,
     uiEvents: GarbageListViewModel.UiEvents,
     modifier: Modifier = Modifier
@@ -80,11 +102,11 @@ fun GarbageListScreen(
                 .padding(paddingValues = contentPadding)
         ) {
             items(uiState.garbageList) { item ->
-                val shop = uiState.bins.find { it.name == item.where }
+                val bin = uiState.bins.find { it.name == item.where }
                 ListItem(
                     item = item,
-                    imageUrl = shop?.imageUrl,
-                    binColor = shop?.binColor,
+                    imageUrl = bin?.imageUrl,
+                    binColor = bin?.binColor,
                     onItemClick = { uiEvents.onEditItemClick(item) }
                 )
             }

@@ -125,5 +125,6 @@ class GarbageSortingViewModel @Inject constructor (
         fun onToggleListVisibilityClick()
         fun onWhatChange(newValue: String)
         fun onWhereChange(newValue: String)
+        fun onAddItemClick()
     }
 }

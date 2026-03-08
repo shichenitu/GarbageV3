@@ -163,6 +163,7 @@ fun GarbageSortingScreenPreview() {
                 override fun onToggleListVisibilityClick() {}
                 override fun onWhatChange(newValue: String) {}
                 override fun onWhereChange(newValue: String) {}
+                override fun onAddItemClick() {}
             }
         )
     }

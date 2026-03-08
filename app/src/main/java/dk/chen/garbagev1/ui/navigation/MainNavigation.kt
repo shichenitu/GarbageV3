@@ -31,9 +31,6 @@ import dk.chen.garbagev1.ui.features.garbage.AddWhatViewModel
 import dk.chen.garbagev1.ui.features.garbage.AddWhere
 import dk.chen.garbagev1.ui.features.garbage.AddWhereScreen
 import dk.chen.garbagev1.ui.features.garbage.AddWhereViewModel
-import dk.chen.garbagev1.ui.features.garbage.Details
-import dk.chen.garbagev1.ui.features.garbage.DetailsScreen
-import dk.chen.garbagev1.ui.features.garbage.DetailsViewModel
 import dk.chen.garbagev1.ui.features.garbage.GarbageListScreen
 import dk.chen.garbagev1.ui.features.garbage.GarbageListViewModel
 import dk.chen.garbagev1.ui.features.garbage.GarbageSearch
@@ -114,25 +111,10 @@ fun NavGraphBuilder.garbageNavGraph(navController: NavHostController) {
                             navOptions = singleTopNavOptions
                         )
 
-                        is GarbageListViewModel.NavigationEvent.NavigateToDetails ->
-                            navController.navigate(Details(itemId = event.itemId))
+                        is GarbageListViewModel.NavigationEvent.NavigateToDetails -> { }
 
                         is GarbageListViewModel.NavigationEvent.NavigateUp ->
                             navController.navigateUp()
-                    }
-                }
-            )
-        }
-
-        composable<Details>(
-            deepLinks = listOf(
-                navDeepLink { uriPattern = "garbage://items/{itemId}" }
-            )
-        ) {
-            DetailsScreen(
-                onNavigate = { event ->
-                    if (event is DetailsViewModel.NavigationEvent.NavigateUp) {
-                        navController.navigateUp()
                     }
                 }
             )
