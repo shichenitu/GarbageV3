@@ -102,7 +102,7 @@ private fun GarbageListScreen(
                 .padding(paddingValues = contentPadding)
         ) {
             items(uiState.garbageList) { item ->
-                val bin = uiState.bins.find { it.name == item.where }
+                val bin = uiState.bins.find { it.name.equals(item.where, ignoreCase = true) }
                 ListItem(
                     item = item,
                     imageUrl = bin?.imageUrl,
