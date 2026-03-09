@@ -17,6 +17,12 @@ data class Bin(
     val binColor: Color
 )
 
+enum class Theme {
+    SYSTEM,
+    LIGHT,
+    DARK
+}
+
 fun Item.toDto(): ItemDto = ItemDto(id = this.id, what = this.what, where = this.where)
 fun Bin.toDto(): BinDto = BinDto(name = this.name, imageUrl = this.imageUrl, binColor = this.binColor.value.toString())
 
