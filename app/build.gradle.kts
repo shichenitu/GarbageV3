@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
-    id("org.jetbrains.kotlin.plugin.serialization") version "2.0.0"
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -67,4 +67,7 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.8.5")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
     implementation("androidx.compose.material:material-icons-extended:1.7.0")
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
 }
