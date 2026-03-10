@@ -37,9 +37,9 @@ class AddWhereViewModel @Inject constructor(
 
         override fun onDoneClick() {
             if (what.isNotBlank() && uiState.value.where.isNotBlank()) {
-                itemRepository.addItem(Item(what = what, where = uiState.value.where))
                 viewModelScope.launch {
-                    _navigationEvents.emit(value = NavigationEvent.NavigateToGarbageList)
+                    itemRepository.addItem(item = Item(what = what, where = uiState.value.where))
+                            _navigationEvents.emit(value = NavigationEvent.NavigateToGarbageList)
                 }
             } else {
                 _uiState.update { it.copy(isError = true) }
