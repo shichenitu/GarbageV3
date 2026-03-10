@@ -55,6 +55,51 @@ abstract class GarbageDatabase : RoomDatabase() {
                     id = UUID.randomUUID().toString(),
                     what = "Cabbage",
                     where = "Food Waste",
+                ),
+                ItemDto(
+                    id = UUID.randomUUID().toString(),
+                    what = "magazine",
+                    where = "paper",
+                ),
+                ItemDto(
+                    id = UUID.randomUUID().toString(),
+                    what = "milk carton",
+                    where = "plastic",
+                ),
+                ItemDto(
+                    id = UUID.randomUUID().toString(),
+                    what = "teddy bears",
+                    where = "daily waste",
+                ),
+                ItemDto(
+                    id = UUID.randomUUID().toString(),
+                    what = "musical instrument",
+                    where = "wood",
+                ),
+                ItemDto(
+                    id = UUID.randomUUID().toString(),
+                    what = "carpets",
+                    where = "bulky waste",
+                ),
+                ItemDto(
+                    id = UUID.randomUUID().toString(),
+                    what = "chips bag",
+                    where = "other",
+                ),
+                ItemDto(
+                    id = UUID.randomUUID().toString(),
+                    what = "paint",
+                    where = "chemical",
+                ),
+                ItemDto(
+                    id = UUID.randomUUID().toString(),
+                    what = "printer",
+                    where = "electronics",
+                ),
+                ItemDto(
+                    id = UUID.randomUUID().toString(),
+                    what = "shoe box",
+                    where = "cardboard",
                 )
             )
             initialItems.forEach {
