@@ -23,4 +23,7 @@ interface ItemDao {
 
     @Query(value = "DELETE FROM items WHERE id = :id")
     suspend fun delete(id: String)
+
+    @Query("SELECT * FROM items WHERE what = :what LIMIT 1")
+    fun getItemWhere(what: String): Flow<ItemEntity?>
 }
