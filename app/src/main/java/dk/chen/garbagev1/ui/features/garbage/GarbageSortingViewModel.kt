@@ -29,8 +29,8 @@ class GarbageSortingViewModel @Inject constructor (
     @ApplicationContext private val context: Context
 ) : ViewModel() {
     sealed class NavigationEvent {
-        object NavigateToList : NavigationEvent()
-        object NavigateToAdd : NavigationEvent()
+        data object NavigateToList : NavigationEvent()
+        data object NavigateToAdd : NavigationEvent()
     }
 
     private val _navigationEvents = MutableSharedFlow<NavigationEvent>()
@@ -38,7 +38,7 @@ class GarbageSortingViewModel @Inject constructor (
 
     private val sortingListVisibility: MutableStateFlow<Boolean> = MutableStateFlow(value = false)
     private val sortingList: StateFlow<List<Item>> =
-        itemRepository.getSortingList()
+        itemRepository.getGarbageList()
             .stateIn(
                 scope = viewModelScope,
                 started = WhileSubscribed(stopTimeoutMillis = 5000),
@@ -78,11 +78,13 @@ class GarbageSortingViewModel @Inject constructor (
 
         override fun onSearchClick(itemWhat: String) {
             if (itemWhat.isNotBlank()) {
-                val foundItem = sortingList.value.find { it.what.equals(itemWhat, ignoreCase = true) }
-                if (foundItem != null) {
-                    itemWhere.update { "${itemWhat} should be placed in: ${foundItem.where}" }
-                } else {
-                    itemWhere.update { "${itemWhat} not found" }
+                viewModelScope.launch {
+                    val foundItem = sortingList.value.find { it.what.equals(itemWhat, ignoreCase = true) }
+                    if (foundItem != null) {
+                        itemWhere.update { "${itemWhat} should be placed in: ${foundItem.where}" }
+                    } else {
+                        itemWhere.update { "${itemWhat} not found" }
+                    }
                 }
             } else {
                 snackBarHandler.postMessage(msg = context.getString(R.string.textfield_error_message))
@@ -90,17 +92,19 @@ class GarbageSortingViewModel @Inject constructor (
         }
 
         override fun onRemoveItemClick(item: Item) {
-            itemRepository.removeItem(item)
-            snackBarHandler.postMessage(
-                msg = context.getString(R.string.item_removed_label, item.what, item.where),
-                actionLabel = context.getString(R.string.undo_label),
-                onActionClick = {
-                    viewModelScope.launch {
-                        itemRepository.addItem(item)
-                        snackBarHandler.postMessage(msg = context.getString(R.string.undo_confirmation_message))
+            viewModelScope.launch {
+                itemRepository.removeItem(item)
+                snackBarHandler.postMessage(
+                    msg = context.getString(R.string.item_removed_label, item.what, item.where),
+                    actionLabel = context.getString(R.string.undo_label),
+                    onActionClick = {
+                        viewModelScope.launch {
+                            itemRepository.addItem(item)
+                            snackBarHandler.postMessage(msg = context.getString(R.string.undo_confirmation_message))
+                        }
                     }
-                }
-            )
+                )
+            }
         }
 
         override fun onToggleListVisibilityClick() {
