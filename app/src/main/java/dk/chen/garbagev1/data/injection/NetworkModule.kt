@@ -41,12 +41,4 @@ object NetworkModule {
             coerceInputValues = true
         }
     }
-
-    @Provides
-    @Singleton
-    fun provideRecyclingStationRepository(
-        apiService: RecyclingStationApiService
-    ): RecyclingStationRepository {
-        return RecyclingStationRepositoryImpl(apiService)
-    }
 }

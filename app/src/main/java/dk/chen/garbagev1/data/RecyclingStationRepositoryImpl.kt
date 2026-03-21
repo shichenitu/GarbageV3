@@ -14,12 +14,15 @@ class RecyclingStationRepositoryImpl @Inject constructor(
         try {
             val response = apiService.getRecyclingStations()
 
+            println("DEBUG: Raw API Data Records - ${response.result.records}")
+
             val stations = response.result.records.map { dto ->
                 dto.toDomain()
             }
 
             emit(stations)
         } catch (e: Exception) {
+            println("NETWORK_ERROR: ${e.message}")
             emit(emptyList())
         }
     }

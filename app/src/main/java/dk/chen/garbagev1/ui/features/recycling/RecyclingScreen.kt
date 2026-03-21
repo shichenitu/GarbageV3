@@ -80,8 +80,7 @@ private fun BinsScreen(
         ) {
             item {
                 Text(
-                    text = "Your Bins",
-                    style = MaterialTheme.typography.titleLarge,
+                    text = "",
                     modifier = Modifier.padding(16.dp)
                 )
                 HorizontalUncontainedCarousel(

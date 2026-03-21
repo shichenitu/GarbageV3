@@ -38,21 +38,21 @@ data class RecyclingResultDto(
 @Serializable
 data class RecyclingStationDto(
     @SerialName("_id") val id: Int,
-    @SerialName("Navn") val name: String,
-    @SerialName("Kategori") val category: String,
-    @SerialName("Adresse") val address: String,
-    @SerialName("Status") val status: String,
-    val bins: List<String>,
-    val latitude: Double,
-    val longitude: Double
+    @SerialName("navn") val name: String = "Unknown Station",
+    @SerialName("kategori") val category: String = "General",
+    @SerialName("adresse") val address: String = "No address available",
+    @SerialName("status") val status: String = "Unknown",
+    val bins: List<String> = emptyList(),
+    @SerialName("latitude") val latitude: Double = 0.0,
+    @SerialName("longitude") val longitude: Double = 0.0
 )
 
 fun RecyclingStationDto.toDomain(): RecyclingStation = RecyclingStation(
     id = this.id.toString(),
     name = this.name,
-    category = this.category,
     address = this.address,
     status = this.status,
+    category = this.category,
     bins = this.bins,
     latitude = this.latitude,
     longitude = this.longitude
