@@ -5,7 +5,9 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import dk.chen.garbagev1.data.RecyclingStationRepositoryImpl
 import dk.chen.garbagev1.data.remote.RecyclingStationApiService
+import dk.chen.garbagev1.domain.RecyclingStationRepository
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
@@ -38,5 +40,13 @@ object NetworkModule {
             ignoreUnknownKeys = true
             coerceInputValues = true
         }
+    }
+
+    @Provides
+    @Singleton
+    fun provideRecyclingStationRepository(
+        apiService: RecyclingStationApiService
+    ): RecyclingStationRepository {
+        return RecyclingStationRepositoryImpl(apiService)
     }
 }
