@@ -57,6 +57,9 @@ object GarbageGraph : NestedGraph {
 object SortingSearch : AppRoute
 
 @Serializable
+object AffaldKbh : AppRoute
+
+@Serializable
 data class SortingList(val itemId: String? = null) : AppRoute
 
 @OptIn(ExperimentalMaterial3Api::class)

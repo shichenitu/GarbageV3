@@ -31,6 +31,7 @@ class GarbageSortingViewModel @Inject constructor (
     sealed class NavigationEvent {
         data object NavigateToList : NavigationEvent()
         data object NavigateToAdd : NavigationEvent()
+        data object NavigateToAffaldKbh : NavigationEvent()
     }
 
     private val _navigationEvents = MutableSharedFlow<NavigationEvent>()
@@ -118,6 +119,12 @@ class GarbageSortingViewModel @Inject constructor (
                 _navigationEvents.emit(NavigationEvent.NavigateToAdd)
             }
         }
+
+        override fun onAffaldKbhClick() {
+            viewModelScope.launch {
+                _navigationEvents.emit(NavigationEvent.NavigateToAffaldKbh)
+            }
+        }
     }
 
     data class UiState(
@@ -137,5 +144,6 @@ class GarbageSortingViewModel @Inject constructor (
         fun onWhatChange(newValue: String)
         fun onWhereChange(newValue: String)
         fun onAddItemClick()
+        fun onAffaldKbhClick()
     }
 }

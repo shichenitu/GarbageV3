@@ -42,6 +42,8 @@ import dk.chen.garbagev1.ui.features.recycling.Bins
 import dk.chen.garbagev1.ui.features.recycling.RecyclingScreen
 import dk.chen.garbagev1.ui.features.settings.Settings
 import dk.chen.garbagev1.ui.features.settings.SettingsScreen
+import dk.chen.garbagev1.ui.features.garbage.AffaldKbh
+import dk.chen.garbagev1.ui.features.garbage.AffaldKbhScreen
 
 @Composable
 fun MainNavigation(modifier: Modifier = Modifier) {
@@ -100,19 +102,28 @@ fun NavGraphBuilder.garbageNavGraph(navController: NavHostController) {
     }
 
     navigation<GarbageGraph>(startDestination = SortingSearch) {
-        composable<SortingSearch>{
+        composable<SortingSearch> {
             GarbageSortingScreen(
                 onNavigate = { event ->
                     when (event) {
                         is GarbageSortingViewModel.NavigationEvent.NavigateToList -> {
                             navController.navigate(SortingList())
                         }
+
                         is GarbageSortingViewModel.NavigationEvent.NavigateToAdd -> {
                             navController.navigate(AddWhat)
+                        }
+
+                        is GarbageSortingViewModel.NavigationEvent.NavigateToAffaldKbh -> {
+                            navController.navigate(AffaldKbh)
                         }
                     }
                 }
             )
+        }
+
+        composable<AffaldKbh> {
+            AffaldKbhScreen()
         }
 
         composable<SortingList>(
@@ -128,7 +139,7 @@ fun NavGraphBuilder.garbageNavGraph(navController: NavHostController) {
                             navOptions = singleTopNavOptions
                         )
 
-                        is GarbageListViewModel.NavigationEvent.NavigateToDetails -> { }
+                        is GarbageListViewModel.NavigationEvent.NavigateToDetails -> {}
 
                         is GarbageListViewModel.NavigationEvent.NavigateUp ->
                             navController.navigateUp()
