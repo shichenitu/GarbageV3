@@ -12,10 +12,13 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.annotation.concurrent.Immutable
 import javax.inject.Inject
+import dk.chen.garbagev1.domain.RecyclingStation
+import dk.chen.garbagev1.domain.RecyclingStationRepository
 
 @HiltViewModel
 class RecyclingViewModel @Inject constructor(
-    private val binRepository: BinRepository
+    private val binRepository: BinRepository,
+    private val recyclingStationRepository: RecyclingStationRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(value = UiState())
@@ -25,6 +28,12 @@ class RecyclingViewModel @Inject constructor(
         viewModelScope.launch {
             binRepository.getBins().collect { bins ->
                 _uiState.update { it.copy(bins = bins) }
+            }
+        }
+
+        viewModelScope.launch {
+            recyclingStationRepository.getStations().collect { stations ->
+                _uiState.update { it.copy(stations = stations) }
             }
         }
     }
@@ -41,6 +50,7 @@ class RecyclingViewModel @Inject constructor(
 
     data class UiState(
         val bins: List<Bin> = emptyList(),
+        val stations: List<RecyclingStation> = emptyList(),
         val selectedBin: Bin? = null
     )
 
