@@ -145,6 +145,18 @@ private fun GarbageSortingScreen(
                     }
                 }
             }
+
+            item {
+                Spacer(Modifier.height(16.dp))
+                Button(
+                    onClick = uiEvents::onAffaldKbhClick,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 48.dp)
+                ) {
+                    Text(text = "Visit AffaldKBH Website")
+                }
+            }
         }
     }
 }
@@ -164,6 +176,7 @@ fun GarbageSortingScreenPreview() {
                 override fun onWhatChange(newValue: String) {}
                 override fun onWhereChange(newValue: String) {}
                 override fun onAddItemClick() {}
+                override fun onAffaldKbhClick() {}
             }
         )
     }
