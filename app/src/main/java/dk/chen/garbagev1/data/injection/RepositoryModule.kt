@@ -11,6 +11,8 @@ import dk.chen.garbagev1.domain.ItemRepository
 import dk.chen.garbagev1.domain.BinRepository
 import dk.chen.garbagev1.domain.UserPreferencesRepository
 import javax.inject.Singleton
+import dk.chen.garbagev1.data.RecyclingStationRepositoryImpl
+import dk.chen.garbagev1.domain.RecyclingStationRepository
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -27,4 +29,10 @@ abstract class RepositoryModule {
     @Singleton
     @Binds
     abstract fun bindUserPreferencesRepository(impl: UserPreferencesRepositoryImpl): UserPreferencesRepository
+
+    @Singleton
+    @Binds
+    abstract fun bindRecyclingStationRepository(
+        impl: RecyclingStationRepositoryImpl
+    ): RecyclingStationRepository
 }
