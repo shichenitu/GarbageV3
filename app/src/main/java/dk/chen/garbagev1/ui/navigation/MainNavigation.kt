@@ -100,13 +100,14 @@ fun NavGraphBuilder.garbageNavGraph(navController: NavHostController) {
     }
 
     navigation<GarbageGraph>(startDestination = SortingSearch) {
-        composable<SortingSearch>{
+        composable<SortingSearch> {
             GarbageSortingScreen(
                 onNavigate = { event ->
                     when (event) {
                         is GarbageSortingViewModel.NavigationEvent.NavigateToList -> {
                             navController.navigate(SortingList())
                         }
+
                         is GarbageSortingViewModel.NavigationEvent.NavigateToAdd -> {
                             navController.navigate(AddWhat)
                         }
@@ -128,7 +129,7 @@ fun NavGraphBuilder.garbageNavGraph(navController: NavHostController) {
                             navOptions = singleTopNavOptions
                         )
 
-                        is GarbageListViewModel.NavigationEvent.NavigateToDetails -> { }
+                        is GarbageListViewModel.NavigationEvent.NavigateToDetails -> {}
 
                         is GarbageListViewModel.NavigationEvent.NavigateUp ->
                             navController.navigateUp()
