@@ -23,17 +23,6 @@ enum class Theme {
     DARK
 }
 
-data class RecyclingStation(
-    val id: String,
-    val name: String,
-    val category: String,
-    val address: String,
-    val status: String,
-    val bins: List<String>,
-    val latitude: Double,
-    val longitude: Double,
-)
-
 fun Item.toDto(): ItemDto = ItemDto(id = this.id, what = this.what, where = this.where)
 fun Bin.toDto(): BinDto = BinDto(name = this.name, imageUrl = this.imageUrl, binColor = this.binColor.value.toString())
 
