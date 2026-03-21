@@ -42,6 +42,8 @@ import dk.chen.garbagev1.ui.features.recycling.Bins
 import dk.chen.garbagev1.ui.features.recycling.RecyclingScreen
 import dk.chen.garbagev1.ui.features.settings.Settings
 import dk.chen.garbagev1.ui.features.settings.SettingsScreen
+import dk.chen.garbagev1.ui.features.garbage.AffaldKbh
+import dk.chen.garbagev1.ui.features.garbage.AffaldKbhScreen
 
 @Composable
 fun MainNavigation(modifier: Modifier = Modifier) {
@@ -111,9 +113,17 @@ fun NavGraphBuilder.garbageNavGraph(navController: NavHostController) {
                         is GarbageSortingViewModel.NavigationEvent.NavigateToAdd -> {
                             navController.navigate(AddWhat)
                         }
+
+                        is GarbageSortingViewModel.NavigationEvent.NavigateToAffaldKbh -> {
+                            navController.navigate(AffaldKbh)
+                        }
                     }
                 }
             )
+        }
+
+        composable<AffaldKbh> {
+            AffaldKbhScreen()
         }
 
         composable<SortingList>(
