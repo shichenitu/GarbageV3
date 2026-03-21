@@ -8,6 +8,7 @@ import androidx.core.graphics.toColorInt
 import dk.chen.garbagev1.data.database.ItemEntity
 import dk.chen.garbagev1.data.database.BinEntity
 import dk.chen.garbagev1.domain.RecyclingStation
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -25,19 +26,29 @@ data class BinDto(
 )
 
 @Serializable
+data class RecyclingStationResponse(
+    val result: RecyclingResultDto
+)
+
+@Serializable
+data class RecyclingResultDto(
+    val records: List<RecyclingStationDto>
+)
+
+@Serializable
 data class RecyclingStationDto(
-    val id: String,
-    val name: String,
-    val category: String,
-    val address: String,
-    val status: String,
+    @SerialName("_id") val id: Int,
+    @SerialName("Navn") val name: String,
+    @SerialName("Kategori") val category: String,
+    @SerialName("Adresse") val address: String,
+    @SerialName("Status") val status: String,
     val bins: List<String>,
     val latitude: Double,
     val longitude: Double
 )
 
 fun RecyclingStationDto.toDomain(): RecyclingStation = RecyclingStation(
-    id = this.id,
+    id = this.id.toString(),
     name = this.name,
     category = this.category,
     address = this.address,
