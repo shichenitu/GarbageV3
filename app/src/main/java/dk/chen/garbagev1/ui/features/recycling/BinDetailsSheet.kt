@@ -21,10 +21,19 @@ import dk.chen.garbagev1.ui.components.BinProvider
 import dk.chen.garbagev1.ui.components.ThemedPreviews
 import dk.chen.garbagev1.ui.theme.theme.GarbageV1Theme
 import kotlinx.coroutines.launch
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.ui.graphics.Color
+import dk.chen.garbagev1.domain.Item
+import dk.chen.garbagev1.ui.features.garbage.GarbageSortingViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BinDetailsSheet(bin: Bin, onDismiss: () -> Unit) {
+fun BinDetailsSheet(
+    bin: Bin,
+    uiEvents: GarbageSortingViewModel.UiEvents,
+    onDismiss: () -> Unit
+) {
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
 
@@ -50,6 +59,23 @@ fun BinDetailsSheet(bin: Bin, onDismiss: () -> Unit) {
                 text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
                 style = MaterialTheme.typography.bodyMedium
             )
+
+            Spacer(modifier = Modifier.height(height = 24.dp))
+
+            Button(
+                onClick = {
+                    uiEvents.onTrackRecyclingClick(bin)
+                    scope.launch { sheetState.hide() }.invokeOnCompletion {
+                        onDismiss()
+                    }
+                },
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(containerColor = bin.binColor)
+            ) {
+                Text(text = "Track Recycling", color = Color.White)
+            }
+
+            Spacer(modifier = Modifier.height(height = 16.dp))
         }
     }
 }
@@ -57,7 +83,22 @@ fun BinDetailsSheet(bin: Bin, onDismiss: () -> Unit) {
 @ThemedPreviews
 @Composable
 private fun ShopDetailsSheetPreview(@PreviewParameter(provider = BinProvider::class) bin: Bin) {
+    val mockEvents = object : GarbageSortingViewModel.UiEvents {
+        override fun onSearchClick(itemWhat: String) {}
+        override fun onRemoveItemClick(item: Item) {}
+        override fun onToggleListVisibilityClick() {}
+        override fun onWhatChange(newValue: String) {}
+        override fun onWhereChange(newValue: String) {}
+        override fun onAddItemClick() {}
+        override fun onAffaldKbhClick() {}
+        override fun onTrackRecyclingClick(bin: Bin) {}
+    }
+
     GarbageV1Theme {
-        BinDetailsSheet(bin = bin, onDismiss = {})
+        BinDetailsSheet(
+            bin = bin,
+            uiEvents = mockEvents,
+            onDismiss = {}
+        )
     }
 }
