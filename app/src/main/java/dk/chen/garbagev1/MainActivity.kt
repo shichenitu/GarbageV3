@@ -22,6 +22,7 @@ import dk.chen.garbagev1.ui.theme.theme.GarbageV1Theme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             val viewModel: SettingsViewModel = hiltViewModel()
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()

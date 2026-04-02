@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "38643475600",
+    "project_id": "garbagev3-bcbae",
+    "storage_bucket": "garbagev3-bcbae.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:38643475600:android:e71e9b2df666cd60aaa415",
+        "android_client_info": {
+          "package_name": "dk.chen.garbagev1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZcBr_g-o_SgmYmbDYSSB7oHCBLecaCYQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

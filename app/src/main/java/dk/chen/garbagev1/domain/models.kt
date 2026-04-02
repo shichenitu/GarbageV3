@@ -14,7 +14,8 @@ data class Item(
 data class Bin(
     val name: String,
     val imageUrl: String,
-    val binColor: Color
+    val binColor: Color,
+    val lastPickupTime: Long = 0L
 )
 
 enum class Theme {
