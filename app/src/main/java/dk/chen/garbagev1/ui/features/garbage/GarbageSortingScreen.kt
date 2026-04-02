@@ -30,6 +30,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dk.chen.garbagev1.domain.Item
 import dk.chen.garbagev1.R
+import dk.chen.garbagev1.domain.Bin
 import dk.chen.garbagev1.ui.theme.theme.GarbageV1Theme
 import dk.chen.garbagev1.domain.fullDescription
 import dk.chen.garbagev1.ui.components.GarbageTopAppBar
@@ -177,6 +178,7 @@ fun GarbageSortingScreenPreview() {
                 override fun onWhereChange(newValue: String) {}
                 override fun onAddItemClick() {}
                 override fun onAffaldKbhClick() {}
+                override fun onTrackRecyclingClick(bin: Bin) {}
             }
         )
     }
