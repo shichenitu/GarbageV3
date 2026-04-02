@@ -31,7 +31,7 @@ import dk.chen.garbagev1.ui.features.garbage.GarbageSortingViewModel
 @Composable
 fun BinDetailsSheet(
     bin: Bin,
-    uiEvents: GarbageSortingViewModel.UiEvents,
+    onTrackClick: (Bin) -> Unit,
     onDismiss: () -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState()
@@ -64,7 +64,7 @@ fun BinDetailsSheet(
 
             Button(
                 onClick = {
-                    uiEvents.onTrackRecyclingClick(bin)
+                    onTrackClick(bin)
                     scope.launch { sheetState.hide() }.invokeOnCompletion {
                         onDismiss()
                     }
@@ -97,7 +97,7 @@ private fun ShopDetailsSheetPreview(@PreviewParameter(provider = BinProvider::cl
     GarbageV1Theme {
         BinDetailsSheet(
             bin = bin,
-            uiEvents = mockEvents,
+            onTrackClick = {},
             onDismiss = {}
         )
     }

@@ -29,8 +29,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.carousel.HorizontalUncontainedCarousel
 import androidx.compose.material3.carousel.rememberCarouselState
+import androidx.compose.runtime.key
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -47,6 +50,22 @@ import dk.chen.garbagev1.ui.theme.theme.GarbageV1Theme
 
 @Serializable
 object Bins : AppRoute
+
+fun formatTimeElapsed(lastPickupTime: Long): String {
+    if (lastPickupTime == 0L) return "Never emptied"
+
+    val diff = System.currentTimeMillis() - lastPickupTime
+    val seconds = diff / 1000
+    val minutes = seconds / 60
+    val hours = minutes / 60
+    val days = hours / 24
+
+    return when {
+        days > 0 -> "${days}d ${hours % 24}h ago"
+        hours > 0 -> "${hours}h ${minutes % 60}m ago"
+        else -> "Just now"
+    }
+}
 
 @Composable
 fun RecyclingScreen(
@@ -83,36 +102,54 @@ private fun BinsScreen(
                     text = "",
                     modifier = Modifier.padding(16.dp)
                 )
-                HorizontalUncontainedCarousel(
-                    state = rememberCarouselState { uiState.bins.count() },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(220.dp),
-                    itemWidth = 186.dp,
-                    itemSpacing = 8.dp,
-                    contentPadding = PaddingValues(horizontal = 16.dp)
-                ) { i ->
-                    val bin = uiState.bins[i]
-                    Card(
+
+                key(uiState.bins.size){
+                    val carouselState = rememberCarouselState { uiState.bins.count() }
+
+                    HorizontalUncontainedCarousel(
+                        state = carouselState,
                         modifier = Modifier
-                            .fillMaxHeight()
-                            .clip(shape = MaterialTheme.shapes.extraLarge)
-                            .clickable { uiEvents.onBinSelected(bin) }
-                    ) {
-                        Column(
-                            modifier = Modifier.fillMaxSize(),
-                            horizontalAlignment = Alignment.CenterHorizontally
+                            .fillMaxWidth()
+                            .height(240.dp),
+                        itemWidth = 186.dp,
+                        itemSpacing = 8.dp,
+                        contentPadding = PaddingValues(horizontal = 16.dp)
+                    ){ i ->
+                        val bin = uiState.bins[i]
+                        Card(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .clip(shape = MaterialTheme.shapes.extraLarge)
+                                .clickable { uiEvents.onBinSelected(bin) }
                         ) {
-                            AsyncImage(
-                                model = bin.imageUrl,
-                                contentDescription = bin.name,
-                                modifier = Modifier.weight(1f),
-                                contentScale = ContentScale.Crop
-                            )
-                            Text(
-                                text = bin.name,
-                                modifier = Modifier.padding(8.dp)
-                            )
+                            Column(
+                                modifier = Modifier.fillMaxSize(),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+
+                                AsyncImage(
+                                    model = bin.imageUrl,
+                                    contentDescription = bin.name,
+                                    modifier = Modifier.weight(1f),
+                                    contentScale = ContentScale.Crop
+                                )
+                                Text(
+                                    text = bin.name,
+                                    style = MaterialTheme.typography.titleMedium,
+                                    modifier = Modifier.padding(8.dp)
+                                )
+
+                                val timeElapsed = formatTimeElapsed(bin.lastPickupTime)
+                                val isOverdue = bin.lastPickupTime != 0L &&
+                                        (System.currentTimeMillis() - bin.lastPickupTime) > 7 * 24 * 3600 * 1000
+
+                                Text(
+                                    text = timeElapsed,
+                                    style = MaterialTheme.typography.labelSmall,
+                                    modifier = Modifier.padding(bottom = 8.dp),
+                                    color = if (isOverdue) Color.Red else Color.Gray
+                                )
+                            }
                         }
                     }
                 }
@@ -138,6 +175,7 @@ private fun BinsScreen(
     uiState.selectedBin?.let {
         BinDetailsSheet(
             bin = it,
+            onTrackClick = { bin -> uiEvents.onTrackRecyclingClick(bin) },
             onDismiss = uiEvents::onDismissBinDetails
         )
     }
@@ -189,6 +227,7 @@ private fun BinsScreenPreview(@PreviewParameter(provider = BinOrNullProvider::cl
             uiEvents = object : RecyclingViewModel.UiEvents {
                 override fun onBinSelected(bin: Bin) {}
                 override fun onDismissBinDetails() {}
+                override fun onTrackRecyclingClick(bin: Bin) {}
             }
         )
     }

@@ -27,6 +27,7 @@ class RecyclingViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             binRepository.getBins().collect { bins ->
+                println("DEBUG: Received ${bins.size} bins from Firestore")
                 _uiState.update { it.copy(bins = bins) }
             }
         }
@@ -46,6 +47,12 @@ class RecyclingViewModel @Inject constructor(
         override fun onDismissBinDetails() {
             _uiState.update { it.copy(selectedBin = null) }
         }
+
+        override fun onTrackRecyclingClick(bin: Bin) {
+            viewModelScope.launch {
+                binRepository.updateBinPickupTime(bin.name, System.currentTimeMillis())
+            }
+        }
     }
 
     data class UiState(
@@ -58,5 +65,6 @@ class RecyclingViewModel @Inject constructor(
     interface UiEvents {
         fun onBinSelected(bin: Bin)
         fun onDismissBinDetails()
+        fun onTrackRecyclingClick(bin: Bin)
     }
 }
