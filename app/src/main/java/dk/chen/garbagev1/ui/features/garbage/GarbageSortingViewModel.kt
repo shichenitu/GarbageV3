@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dk.chen.garbagev1.R
+import dk.chen.garbagev1.domain.Bin
+import dk.chen.garbagev1.domain.BinRepository
 import dk.chen.garbagev1.domain.Item
 import dk.chen.garbagev1.domain.ItemRepository
 import dk.chen.garbagev1.ui.components.SnackBarHandler
@@ -26,6 +28,7 @@ import javax.inject.Inject
 class GarbageSortingViewModel @Inject constructor (
     private val itemRepository: ItemRepository,
     private val snackBarHandler: SnackBarHandler,
+    private val binRepository: BinRepository,
     @ApplicationContext private val context: Context
 ) : ViewModel() {
     sealed class NavigationEvent {
@@ -36,6 +39,14 @@ class GarbageSortingViewModel @Inject constructor (
 
     private val _navigationEvents = MutableSharedFlow<NavigationEvent>()
     val navigationEvents = _navigationEvents.asSharedFlow()
+
+    val bins: StateFlow<List<Bin>> = binRepository.getBins()
+        .stateIn(
+            scope = viewModelScope,
+            started = WhileSubscribed(5000),
+            initialValue = emptyList()
+        )
+
 
     private val sortingListVisibility: MutableStateFlow<Boolean> = MutableStateFlow(value = false)
     private val sortingList: StateFlow<List<Item>> =
@@ -125,6 +136,14 @@ class GarbageSortingViewModel @Inject constructor (
                 _navigationEvents.emit(NavigationEvent.NavigateToAffaldKbh)
             }
         }
+
+        override fun onTrackRecyclingClick(bin: Bin) {
+            viewModelScope.launch {
+                val currentTime = System.currentTimeMillis()
+                binRepository.updateBinPickupTime(bin.name, currentTime)
+                snackBarHandler.postMessage(msg = "${bin.name} recycling tracked!")
+            }
+        }
     }
 
     data class UiState(
@@ -145,5 +164,6 @@ class GarbageSortingViewModel @Inject constructor (
         fun onWhereChange(newValue: String)
         fun onAddItemClick()
         fun onAffaldKbhClick()
+        fun onTrackRecyclingClick(bin: Bin)
     }
 }
