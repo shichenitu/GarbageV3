@@ -1,55 +1,82 @@
 package dk.chen.garbagev1.data
 
-import dk.chen.garbagev1.data.database.ItemDao
-import dk.chen.garbagev1.data.database.ItemEntity
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.snapshots
 import dk.chen.garbagev1.domain.Item
 import dk.chen.garbagev1.domain.ItemRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.collections.map
 
 @Singleton
 class ItemRepositoryImpl @Inject constructor(
-    private val itemDao: ItemDao
+    private val db: FirebaseFirestore
 ) : ItemRepository {
 
+    private val itemsCollection = db.collection("items")
+
     override fun getGarbageList(): Flow<List<Item>> {
-        return itemDao.getGarbageList().map { entityList ->
-            entityList.map { it.toItem() }
-        }
+        return itemsCollection
+            .orderBy("what")
+            .snapshots()
+            .map { snapshot ->
+                snapshot.toObjects(ItemDto::class.java).map { it.toItem() }
+            }
     }
 
     override fun getItem(id: String): Flow<Item?> {
-        return itemDao.getItem(id = id).map { it?.toItemDto()?.toItem() }
+        return itemsCollection.document(id)
+            .snapshots()
+            .map { snapshot ->
+                snapshot.toObject(ItemDto::class.java)?.toItem()
+            }
     }
 
     override suspend fun addItem(item: Item) {
         val formattedItem =
-            item.copy(what = item.what.toTitleCase(), where = item.where.toTitleCase())
-        itemDao.insert(item = formattedItem.toEntity())
+            item.copy(
+                what = item.what.toTitleCase(),
+                where = item.where.toTitleCase(),
+            )
+        val itemDto = formattedItem.toDto()
+        itemsCollection.document(itemDto.id).set(itemDto).await()
     }
 
     override suspend fun removeItem(item: Item) {
-        itemDao.delete(id = item.id)
+        itemsCollection.document(item.id).delete().await()
     }
 
     override suspend fun updateItem(item: Item) {
         val formattedItem =
             item.copy(what = item.what.toTitleCase(), where = item.where.toTitleCase())
-        itemDao.update(item = formattedItem.toEntity())
+        val itemDto = formattedItem.toDto()
+        itemsCollection.document(itemDto.id).set(itemDto, SetOptions.merge()).await()
     }
 
     override suspend fun getItemByWhat(what: String): Item? {
-        return itemDao.getItemWhere(what.toTitleCase())
-            .map { it?.toItem() }
-            .first()
+        return try {
+            val querySnapshot = itemsCollection
+                .whereEqualTo("what", what.toTitleCase())
+                .get()
+                .await()
+
+            querySnapshot.documents.firstOrNull()
+                ?.toObject(ItemDto::class.java)
+                ?.toItem()
+        } catch (e: Exception) {
+            null
+        }
     }
 
-    private fun ItemEntity.toItem() = Item(id = id, what = what, where = where)
-
-    private fun Item.toEntity() = ItemEntity(id = id, what = what, where = where)
+    private fun Item.toDto() = ItemDto(
+        id = this.id,
+        what = this.what,
+        where = this.where
+    )
 
     private fun String.toTitleCase(): String {
         return this.trim().split(" ").joinToString(separator = " ") { word ->
