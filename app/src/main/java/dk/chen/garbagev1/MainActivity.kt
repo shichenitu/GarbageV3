@@ -14,6 +14,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import dk.chen.garbagev1.domain.Theme
+import dk.chen.garbagev1.ui.components.RequestNotificationPermission
 import dk.chen.garbagev1.ui.features.settings.SettingsViewModel
 import dk.chen.garbagev1.ui.navigation.MainNavigation
 import dk.chen.garbagev1.ui.theme.theme.GarbageV1Theme
@@ -57,6 +58,7 @@ class MainActivity : ComponentActivity() {
                 ) { darkTheme },
             )
             GarbageV1Theme() {
+                RequestNotificationPermission()
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
