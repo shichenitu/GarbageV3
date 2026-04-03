@@ -30,4 +30,6 @@
     <string name="add_button_label">Add item</string>
     <string name="ok_button_label">OK</string>
     <string name="theme_label">Theme</string>
+    <string name="deadline_notification_title">Deadline Tomorrow!</string>
+    <string name="deadline_notification_message">Don\'t forget to throw %1$s to %2$s.</string>
 </resources>
