@@ -12,21 +12,39 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import dagger.hilt.android.AndroidEntryPoint
+import dk.chen.garbagev1.core.workers.DeadlineNotificationWorker
 import dk.chen.garbagev1.domain.Theme
 import dk.chen.garbagev1.ui.components.RequestNotificationPermission
 import dk.chen.garbagev1.ui.features.settings.SettingsViewModel
 import dk.chen.garbagev1.ui.navigation.MainNavigation
 import dk.chen.garbagev1.ui.theme.theme.GarbageV1Theme
+import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val workRequest = PeriodicWorkRequestBuilder<DeadlineNotificationWorker>(
+            8, TimeUnit.HOURS
+        ).build()
+
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+            "RecyclingCheck",
+            ExistingPeriodicWorkPolicy.KEEP,
+            workRequest
+        )
+
+        enableEdgeToEdge()
+
         setContent {
             val viewModel: SettingsViewModel = hiltViewModel()
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
             val darkTheme = when (uiState.theme) {
                 Theme.LIGHT -> false
                 Theme.DARK -> true
