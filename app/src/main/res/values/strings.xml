@@ -40,4 +40,6 @@
     <string name="location_permission_title">Location Permission Required</string>
     <string name="location_permission_rationale">We need your location to sort shops near you and to enable geofencing features, such as notifying you when you are near your favorite stores. Please grant this permission.</string>
     <string name="continue_button_label">Continue</string>
+    <string name="item_singular">item</string>
+    <string name="item_plural">items</string>
 </resources>
