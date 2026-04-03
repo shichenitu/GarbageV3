@@ -1,6 +1,8 @@
 package dk.chen.garbagev1.ui.components
 
-import android.Manifest
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -11,12 +13,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.res.stringResource
 import dk.chen.garbagev1.R
+import androidx.compose.ui.platform.LocalContext
 
 @Composable
 fun RequestBackgroundLocationPermission(
     onPermissionGranted: () -> Unit,
     onPermissionDenied: () -> Unit
 ) {
+    val mContext = LocalContext.current
+
     // Before Android 10 (Q), background location was granted automatically with foreground
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
         LaunchedEffect(key1 = Unit) { onPermissionGranted() }
@@ -39,7 +44,13 @@ fun RequestBackgroundLocationPermission(
         },
         confirmButton = {
             TextButton(onClick = {
-                permissionLauncher.launch(input = Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                    data = Uri.fromParts("package", mContext.packageName, null)
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                }
+                mContext.startActivity(intent)
+
+                onPermissionDenied()
             }) {
                 Text(text = stringResource(id = R.string.go_to_settings_button_label))
             }
