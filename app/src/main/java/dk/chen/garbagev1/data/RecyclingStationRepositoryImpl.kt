@@ -15,8 +15,6 @@ class RecyclingStationRepositoryImpl @Inject constructor(
         try {
             val response = apiService.getRecyclingStations()
 
-            println("DEBUG: Raw API Data Records - ${response.result.records}")
-
             val stations = response.result.records.map { dto ->
                 dto.toDomain()
             }
