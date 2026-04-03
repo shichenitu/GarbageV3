@@ -1,5 +1,6 @@
 package dk.chen.garbagev1.data
 
+import com.google.firebase.firestore.FirebaseFirestore
 import dk.chen.garbagev1.data.remote.RecyclingStationApiService
 import dk.chen.garbagev1.domain.RecyclingStation
 import dk.chen.garbagev1.domain.RecyclingStationRepository
@@ -18,6 +19,13 @@ class RecyclingStationRepositoryImpl @Inject constructor(
 
             val stations = response.result.records.map { dto ->
                 dto.toDomain()
+            }
+
+            stations.forEach { station ->
+                FirebaseFirestore.getInstance()
+                    .collection("stations")
+                    .document(station.id)
+                    .set(station)
             }
 
             emit(stations)
