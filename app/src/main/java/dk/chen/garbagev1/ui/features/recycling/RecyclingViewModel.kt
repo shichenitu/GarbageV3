@@ -53,12 +53,25 @@ class RecyclingViewModel @Inject constructor(
                 binRepository.updateBinPickupTime(bin.name, System.currentTimeMillis())
             }
         }
+
+        override fun onEnableGeofencingClick() {
+            _uiState.update { it.copy(showBackgroundPermission = true) }
+        }
+
+        override fun onBackgroundPermissionHandled(isGranted: Boolean) {
+            _uiState.update { it.copy(showBackgroundPermission = false) }
+
+            if (isGranted) {
+                println("DEBUG: Background Location Permission Granted!")
+            }
+        }
     }
 
     data class UiState(
         val bins: List<Bin> = emptyList(),
         val stations: List<RecyclingStation> = emptyList(),
-        val selectedBin: Bin? = null
+        val selectedBin: Bin? = null,
+        val showBackgroundPermission: Boolean = false
     )
 
     @Immutable
@@ -66,5 +79,7 @@ class RecyclingViewModel @Inject constructor(
         fun onBinSelected(bin: Bin)
         fun onDismissBinDetails()
         fun onTrackRecyclingClick(bin: Bin)
+        fun onEnableGeofencingClick()
+        fun onBackgroundPermissionHandled(isGranted: Boolean)
     }
 }

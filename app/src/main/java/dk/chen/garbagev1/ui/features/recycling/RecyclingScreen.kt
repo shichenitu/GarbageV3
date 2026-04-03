@@ -8,6 +8,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import dk.chen.garbagev1.ui.navigation.AppRoute
 import kotlinx.serialization.Serializable
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -21,6 +22,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Badge
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -30,11 +32,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.carousel.HorizontalUncontainedCarousel
 import androidx.compose.material3.carousel.rememberCarouselState
 import androidx.compose.runtime.key
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -44,6 +46,7 @@ import dk.chen.garbagev1.R
 import dk.chen.garbagev1.domain.Bin
 import dk.chen.garbagev1.domain.RecyclingStation
 import dk.chen.garbagev1.ui.components.BinOrNullProvider
+import dk.chen.garbagev1.ui.components.RequestBackgroundLocationPermission
 import dk.chen.garbagev1.ui.components.ThemedPreviews
 import dk.chen.garbagev1.ui.components.previewBins
 import dk.chen.garbagev1.ui.theme.theme.GarbageV1Theme
@@ -83,6 +86,17 @@ private fun BinsScreen(
     uiEvents: RecyclingViewModel.UiEvents,
     modifier: Modifier = Modifier
 ) {
+    if (uiState.showBackgroundPermission) {
+        RequestBackgroundLocationPermission(
+            onPermissionGranted = {
+                uiEvents.onBackgroundPermissionHandled(true)
+            },
+            onPermissionDenied = {
+                uiEvents.onBackgroundPermissionHandled(false)
+            }
+        )
+    }
+
     Scaffold(
         topBar = {
             GarbageTopAppBar(
@@ -98,10 +112,19 @@ private fun BinsScreen(
             contentPadding = PaddingValues(bottom = 16.dp)
         ) {
             item {
-                Text(
-                    text = "",
-                    modifier = Modifier.padding(16.dp)
-                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp, end = 16.dp, start = 16.dp),
+                    contentAlignment = Alignment.CenterEnd
+                ){
+                    Button(
+                        onClick = { uiEvents.onEnableGeofencingClick() },
+                        shape = MaterialTheme.shapes.medium
+                    ) {
+                        Text(text = stringResource(id = R.string.enable_geofencing_button_label))
+                    }
+                }
 
                 key(uiState.bins.size){
                     val carouselState = rememberCarouselState { uiState.bins.count() }
@@ -228,6 +251,8 @@ private fun BinsScreenPreview(@PreviewParameter(provider = BinOrNullProvider::cl
                 override fun onBinSelected(bin: Bin) {}
                 override fun onDismissBinDetails() {}
                 override fun onTrackRecyclingClick(bin: Bin) {}
+                override fun onEnableGeofencingClick() {}
+                override fun onBackgroundPermissionHandled(isGranted: Boolean) {}
             }
         )
     }
