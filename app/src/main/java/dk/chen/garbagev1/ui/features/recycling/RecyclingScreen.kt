@@ -54,8 +54,8 @@ import dk.chen.garbagev1.ui.theme.theme.GarbageV1Theme
 @Serializable
 object Bins : AppRoute
 
-fun formatTimeElapsed(lastPickupTime: Long): String {
-    if (lastPickupTime == 0L) return "Never emptied"
+fun formatTimeElapsed(lastPickupTime: Long): String? {
+    if (lastPickupTime == 0L) return null
 
     val diff = System.currentTimeMillis() - lastPickupTime
     val seconds = diff / 1000
@@ -162,12 +162,14 @@ private fun BinsScreen(
                                     modifier = Modifier.padding(8.dp)
                                 )
 
-                                val timeElapsed = formatTimeElapsed(bin.lastPickupTime)
+                                val timeElapsedStr = formatTimeElapsed(bin.lastPickupTime)
                                 val isOverdue = bin.lastPickupTime != 0L &&
                                         (System.currentTimeMillis() - bin.lastPickupTime) > 7 * 24 * 3600 * 1000
 
+                                val displayText = timeElapsedStr ?: stringResource(id = R.string.never_emptied)
+
                                 Text(
-                                    text = timeElapsed,
+                                    text = displayText,
                                     style = MaterialTheme.typography.labelSmall,
                                     modifier = Modifier.padding(bottom = 8.dp),
                                     color = if (isOverdue) Color.Red else Color.Gray
@@ -187,8 +189,16 @@ private fun BinsScreen(
                 )
             }
 
-            items(
+            val filteredStations = if (uiState.selectedBin == null) {
                 uiState.stations
+            } else {
+                uiState.stations.filter { station ->
+                    station.category.contains(uiState.selectedBin!!.name, ignoreCase = true)
+                }
+            }
+
+            items(
+                filteredStations
             ) { station ->
                 StationCard(station = station)
             }

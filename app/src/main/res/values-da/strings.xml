@@ -60,4 +60,7 @@
     <string name="theme_system">Systemstandard</string>
 
     <string name="item_placement_format">%1$s skal sorteres som %2$s</string>
+    <string name="track_recycling">Spor genbrug</string>
+    <string name="never_emptied">Aldrig tømt</string>
+
 </resources>
