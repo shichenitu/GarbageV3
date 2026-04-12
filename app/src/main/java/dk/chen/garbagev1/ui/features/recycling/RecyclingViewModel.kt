@@ -3,6 +3,7 @@ package dk.chen.garbagev1.ui.features.recycling
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dk.chen.garbagev1.core.GeofenceManager
 import dk.chen.garbagev1.domain.Bin
 import dk.chen.garbagev1.domain.BinRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +19,8 @@ import dk.chen.garbagev1.domain.RecyclingStationRepository
 @HiltViewModel
 class RecyclingViewModel @Inject constructor(
     private val binRepository: BinRepository,
-    private val recyclingStationRepository: RecyclingStationRepository
+    private val recyclingStationRepository: RecyclingStationRepository,
+    private val geofenceManager: GeofenceManager
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(value = UiState())
@@ -27,7 +29,6 @@ class RecyclingViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             binRepository.getBins().collect { bins ->
-                println("DEBUG: Received ${bins.size} bins from Firestore")
                 _uiState.update { it.copy(bins = bins) }
             }
         }
@@ -35,6 +36,10 @@ class RecyclingViewModel @Inject constructor(
         viewModelScope.launch {
             recyclingStationRepository.getStations().collect { stations ->
                 _uiState.update { it.copy(stations = stations) }
+
+                if (stations.isNotEmpty()) {
+                    geofenceManager.registerGeofences(stations)
+                }
             }
         }
     }
