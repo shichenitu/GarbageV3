@@ -181,7 +181,7 @@ private fun BinsScreen(
             item {
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(
-                    text = "Recycling Stations (API)",
+                    text = stringResource(R.string.recycling_stations_api),
                     style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                 )
