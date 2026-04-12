@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Affaldssortering</string>
+    <string name="list_label">%1$s: %2$s</string>
+    <string name="show_sorting_list_label">Vis sorteringsliste</string>
+    <string name="where_label">Hvor</string>
+    <string name="garbage_item_label">Affaldsemne</string>
+    <string name="search_item_label">Søg efter emne</string>
+    <string name="undo_label">Fortryd</string>
+    <string name="item_removed_label">Emnet \"%1$s\" fra \"%2$s\" blev fjernet</string>
+    <string name="undo_confirmation_message">Sletningen blev fortrydt</string>
+    <string name="textfield_error_message">Feltet skal udfyldes</string>
+    <string name="up_button_label">Tilbage</string>
+    <string name="close_button_label">Luk</string>
+    <string name="garbage_screen_title">Sortering</string>
+    <string name="bins_screen_title">Genbrug</string>
+    <string name="settings_screen_title">Indstillinger</string>
+    <string name="add_what_title">Tilføj emne: Hvad</string>
+    <string name="add_where_title">Tilføj emne: Hvor</string>
+    <string name="what_label">Hvad</string>
+    <string name="next_button_label">Næste</string>
+    <string name="bins_near_you_title">Genbrug</string>
+    <string name="done_button_label">Færdig</string>
+    <string name="cancel_addition_button_label">Annuller tilføjelse</string>
+    <string name="edit_item_title">Rediger emne</string>
+    <string name="delete_item_title">Slet emne</string>
+    <string name="delete_item_confirmation">Er du sikker på, at du vil slette dette emne?</string>
+    <string name="delete_button_label">Slet</string>
+    <string name="cancel_button_label">Annuller</string>
+    <string name="save_button_label">Gem</string>
+    <string name="add_button_label">Tilføj emne</string>
+    <string name="ok_button_label">OK</string>
+    <string name="theme_label">Tema</string>
+    <string name="deadline_notification_title">Frist i morgen!</string>
+    <string name="deadline_notification_message">Glem ikke at smide %1$s i %2$s.</string>
+    <string name="enable_geofencing_button_label">Aktivér geofencing</string>
+    <string name="no_thanks_button_label">Nej tak</string>
+
+    <string name="background_location_permission_title">Baggrundsplacering påkrævet</string>
+    <string name="background_location_permission_rationale">For at kunne give dig besked, når du er i nærheden af genbrugsstationer, selv når appen er lukket eller ikke er i brug, indsamler GarbageV4 lokationsdata i baggrunden.\n\nVælg venligst \"Tillad altid\" på næste skærm for at aktivere geofencing.</string>
+    <string name="go_to_settings_button_label">Gå til indstillinger</string>
+
+    <string name="location_permission_title">Lokationstilladelse påkrævet</string>
+    <string name="location_permission_rationale">Vi har brug for din lokation til at finde genbrugsstationer i nærheden af dig og aktivere geofencing-funktioner. Tillad venligst dette.</string>
+
+    <string name="continue_button_label">Fortsæt</string>
+    <string name="item_singular">emne</string>
+    <string name="item_plural">emner</string>
+    <string name="garbage_memo">Affalds-memo</string>
+
+    <string name="snap_a_memo">I tvivl om sorteringen? Tag et huskebillede!</string>
+    <string name="take_a_photo">Tag et billede</string>
+
+    <string name="show_sorting_list">Vis sorteringsliste</string>
+    <string name="visit_affaldkbh_website">Besøg AffaldKBH\'s hjemmeside</string>
+    <string name="recycling_stations_api">Genbrugsstationer (API)</string>
+</resources>
