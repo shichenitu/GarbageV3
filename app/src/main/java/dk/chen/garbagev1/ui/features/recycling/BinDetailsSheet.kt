@@ -24,6 +24,8 @@ import kotlinx.coroutines.launch
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import dk.chen.garbagev1.R
 import dk.chen.garbagev1.domain.Item
 import dk.chen.garbagev1.ui.features.garbage.GarbageSortingViewModel
 
@@ -72,7 +74,7 @@ fun BinDetailsSheet(
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(containerColor = bin.binColor)
             ) {
-                Text(text = "Track Recycling", color = Color.White)
+                Text(text = stringResource(R.string.track_recycling), color = Color.White)
             }
 
             Spacer(modifier = Modifier.height(height = 16.dp))

@@ -42,4 +42,21 @@
     <string name="continue_button_label">Continue</string>
     <string name="item_singular">item</string>
     <string name="item_plural">items</string>
+    <string name="garbage_memo">Garbage Memo</string>
+    <string name="snap_a_memo">Unsure where it goes? Snap a memo!</string>
+    <string name="take_a_photo">Take a Photo</string>
+    <string name="show_sorting_list">Show sorting list</string>
+    <string name="visit_affaldkbh_website">Visit AffaldKBH Website</string>
+    <string name="recycling_stations_api">Recycling Stations (API)</string>
+
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="theme_system">System</string>
+
+    <string name="item_placement_format">%1$s should be placed in %2$s</string>
+
+    <string name="track_recycling">Track Recycling</string>
+    <string name="never_emptied">Never emptied</string>
+
+
 </resources>

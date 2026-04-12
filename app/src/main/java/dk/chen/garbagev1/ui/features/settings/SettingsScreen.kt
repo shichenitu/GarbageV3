@@ -75,8 +75,14 @@ private fun SettingsScreen(
                 expanded = expanded,
                 onExpandedChange = { expanded = !expanded }
             ) {
+                val currentThemeText = when (uiState.theme) {
+                    Theme.LIGHT -> stringResource(id = R.string.theme_light)
+                    Theme.DARK -> stringResource(id = R.string.theme_dark)
+                    Theme.SYSTEM -> stringResource(id = R.string.theme_system)
+                }
+
                 TextField(
-                    value = uiState.theme.name.lowercase(),
+                    value = currentThemeText,
                     onValueChange = {},
                     readOnly = true,
                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
@@ -91,9 +97,15 @@ private fun SettingsScreen(
                     onDismissRequest = { expanded = false }
                 ) {
                     Theme.entries.forEach { theme ->
+                        val itemThemeText = when (theme) {
+                            Theme.LIGHT -> stringResource(id = R.string.theme_light)
+                            Theme.DARK -> stringResource(id = R.string.theme_dark)
+                            Theme.SYSTEM -> stringResource(id = R.string.theme_system)
+                        }
+
                         DropdownMenuItem(
                             text = {
-                                Text(text = theme.name.lowercase())
+                                Text(text = itemThemeText)
                             },
                             onClick = {
                                 uiEvents.onSetTheme(theme)

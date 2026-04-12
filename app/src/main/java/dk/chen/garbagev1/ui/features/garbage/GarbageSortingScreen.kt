@@ -142,7 +142,7 @@ private fun GarbageSortingScreen(
                         Text(text = stringResource(id = R.string.where_label))
                     }
                     Button(onClick = uiEvents::onToggleListVisibilityClick) {
-                        Text(text = "Show sorting list")
+                        Text(text = stringResource(R.string.show_sorting_list))
                     }
                 }
             }
@@ -155,7 +155,7 @@ private fun GarbageSortingScreen(
                         .fillMaxWidth()
                         .padding(horizontal = 48.dp)
                 ) {
-                    Text(text = "Visit AffaldKBH Website")
+                    Text(text = stringResource(R.string.visit_affaldkbh_website))
                 }
             }
         }

@@ -175,7 +175,7 @@ private fun ListItem(item: Item, imageUrl: String?, binColor: Color?, onItemClic
                     color = binColor ?: MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = "${item.what} should be placed in ${item.where}",
+                    text = stringResource(id = R.string.item_placement_format, item.what, item.where),
                     style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Thin),
                     color = binColor ?: MaterialTheme.colorScheme.onSurface
                 )
@@ -270,7 +270,7 @@ fun BinPhotoSection(modifier: Modifier = Modifier) {
         if (imageUri != null) {
             AsyncImage(
                 model = imageUri,
-                contentDescription = "Garbage Memo",
+                contentDescription = stringResource(R.string.garbage_memo),
                 modifier = Modifier
                     .size(200.dp)
                     .clip(RoundedCornerShape(16.dp)),
@@ -283,17 +283,19 @@ fun BinPhotoSection(modifier: Modifier = Modifier) {
         } else {
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(
-                    modifier = Modifier.padding(16.dp).fillMaxWidth(),
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "Unsure where it goes? Snap a memo!",
+                        text = stringResource(R.string.snap_a_memo),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Button(onClick = { permissionLauncher.launch(Manifest.permission.CAMERA) }) {
-                        Text("Take a Photo")
+                        Text(stringResource(R.string.take_a_photo))
                     }
                 }
             }
