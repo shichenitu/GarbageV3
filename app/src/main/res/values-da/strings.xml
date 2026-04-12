@@ -54,4 +54,8 @@
     <string name="show_sorting_list">Vis sorteringsliste</string>
     <string name="visit_affaldkbh_website">Besøg AffaldKBH\'s hjemmeside</string>
     <string name="recycling_stations_api">Genbrugsstationer (API)</string>
+
+    <string name="theme_light">Lys</string>
+    <string name="theme_dark">Mørk</string>
+    <string name="theme_system">Systemstandard</string>
 </resources>

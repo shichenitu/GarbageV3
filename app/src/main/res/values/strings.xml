@@ -48,4 +48,8 @@
     <string name="show_sorting_list">Show sorting list</string>
     <string name="visit_affaldkbh_website">Visit AffaldKBH Website</string>
     <string name="recycling_stations_api">Recycling Stations (API)</string>
+
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="theme_system">System</string>
 </resources>
