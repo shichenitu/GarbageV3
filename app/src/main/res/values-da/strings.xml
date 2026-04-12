@@ -58,4 +58,6 @@
     <string name="theme_light">Lys</string>
     <string name="theme_dark">Mørk</string>
     <string name="theme_system">Systemstandard</string>
+
+    <string name="item_placement_format">%1$s skal sorteres som %2$s</string>
 </resources>

@@ -175,7 +175,7 @@ private fun ListItem(item: Item, imageUrl: String?, binColor: Color?, onItemClic
                     color = binColor ?: MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = "${item.what} should be placed in ${item.where}",
+                    text = stringResource(id = R.string.item_placement_format, item.what, item.where),
                     style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Thin),
                     color = binColor ?: MaterialTheme.colorScheme.onSurface
                 )
