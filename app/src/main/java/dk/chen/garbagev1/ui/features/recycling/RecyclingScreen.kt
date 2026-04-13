@@ -3,6 +3,9 @@ package dk.chen.garbagev1.ui.features.recycling
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import dk.chen.garbagev1.ui.navigation.AppRoute
@@ -25,10 +28,15 @@ import androidx.compose.material3.Badge
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.carousel.HorizontalUncontainedCarousel
 import androidx.compose.material3.carousel.rememberCarouselState
 import androidx.compose.runtime.key
@@ -86,6 +94,9 @@ private fun BinsScreen(
     uiEvents: RecyclingViewModel.UiEvents,
     modifier: Modifier = Modifier
 ) {
+    var filterExpanded by remember { mutableStateOf(false) }
+    var selectedFilterBinName by remember { mutableStateOf<String?>(null) }
+
     if (uiState.showBackgroundPermission) {
         RequestBackgroundLocationPermission(
             onPermissionGranted = {
@@ -182,18 +193,72 @@ private fun BinsScreen(
 
             item {
                 Spacer(modifier = Modifier.height(24.dp))
-                Text(
-                    text = stringResource(R.string.recycling_stations_api),
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-                )
+
+                Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+                    Text(
+                        text = stringResource(R.string.recycling_stations_api),
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.padding(vertical = 8.dp)
+                    )
+
+                    ExposedDropdownMenuBox(
+                        expanded = filterExpanded,
+                        onExpandedChange = { filterExpanded = !filterExpanded },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        TextField(
+                            value = selectedFilterBinName ?: "All Categories",
+                            onValueChange = {},
+                            readOnly = true,
+                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = filterExpanded) },
+                            modifier = Modifier
+                                .menuAnchor(type = MenuAnchorType.PrimaryNotEditable)
+                                .fillMaxWidth()
+                        )
+
+                        ExposedDropdownMenu(
+                            expanded = filterExpanded,
+                            onDismissRequest = { filterExpanded = false }
+                        ) {
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.all_categories)) },
+                                onClick = {
+                                    selectedFilterBinName = null
+                                    filterExpanded = false
+                                }
+                            )
+                            uiState.bins.forEach { bin ->
+                                DropdownMenuItem(
+                                    text = { Text(bin.name) },
+                                    onClick = {
+                                        selectedFilterBinName = bin.name
+                                        filterExpanded = false
+                                    }
+                                )
+                            }
+                        }
+                    }
+                }
+                Spacer(modifier = Modifier.height(16.dp))
             }
 
-            val filteredStations = if (uiState.selectedBin == null) {
+            val filteredStations = if (selectedFilterBinName == null) {
                 uiState.stations
             } else {
                 uiState.stations.filter { station ->
-                    station.category.contains(uiState.selectedBin!!.name, ignoreCase = true)
+                    val cat = station.category.lowercase()
+
+                    when (selectedFilterBinName) {
+                        "Batteries", "Plastic", "Cardboard", "Glass", "Paper", "Metal", "Food" , "Daily Waste" -> {
+                            cat.contains("nærgenbrugsstation") || cat.contains("genbrugsstation")
+                        }
+
+                        "Electronics", "Bulky Waste", "Wood", "Chemical","Textile Waste", "Other" -> {
+                            cat.contains("genbrugsstation") && !cat.contains("nær")
+                        }
+
+                        else -> true
+                    }
                 }
             }
 
