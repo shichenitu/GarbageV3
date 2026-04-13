@@ -57,6 +57,7 @@
 
     <string name="track_recycling">Track Recycling</string>
     <string name="never_emptied">Never emptied</string>
+    <string name="all_categories">All Categories</string>
 
 
 </resources>
